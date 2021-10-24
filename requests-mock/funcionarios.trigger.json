@@ -1,0 +1,43 @@
+{
+  "Records": [
+    {
+      "eventID": "858bfcf1773fadbeb19c5275548298db",
+      "eventName": "INSERT",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "us-east-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1635114228,
+        "Keys": {
+          "nome": {
+            "S": "Kaio Geglio"
+          },
+          "id": {
+            "S": "0f381170-3519-11ec-817a-c5fd8d96f28e"
+          }
+        },
+        "NewImage": {
+          "createdAt": {
+            "S": "2021-10-24T22:23:48.743Z"
+          },
+          "idade": {
+            "S": "25"
+          },
+          "nome": {
+            "S": "Kaio Geglio"
+          },
+          "id": {
+            "S": "0f381170-3519-11ec-817a-c5fd8d96f28e"
+          },
+          "cargo": {
+            "S": "Programador"
+          }
+        },
+        "SequenceNumber": "400000000013246870212",
+        "SizeBytes": 162,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:769088301148:table/Funcionarios/stream/2021-10-24T22:01:32.823"
+    }
+  ]
+}

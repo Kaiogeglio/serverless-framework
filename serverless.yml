@@ -1,0 +1,76 @@
+
+service: trigger-dynamo
+
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    DYNAMODB_TABLE: Funcionarios
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+        - dynamodb:PutItem
+        - dynamodb:ListStreams
+        - dynamodb:DescribeStream
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+
+resources:
+  Resources:
+    FuncionariosTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: nome
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: nome
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+
+functions:
+  insert:
+    handler: handler.funcionariosInsert
+    events:
+      - http:
+          path: funcionarios
+          method: post
+          cors: true
+
+  get:
+    handler: handler.funcionariosGet
+    events:
+      - http:
+          path: funcionarios
+          method: get
+          cors: true
+
+  update:
+    handler: handler.funcionariosUpdate
+    events:
+      - http:
+          path: funcionarios
+          method: put
+          cors: true
+
+
+  trigger:
+    handler: handler.funcionariosTrigger
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt:
+              - FuncionariosTable
+              - StreamArn

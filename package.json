@@ -1,0 +1,20 @@
+{
+  "name": "trigger-dynamo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "aws-sdk": "^2.648.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest",
+    "invoke-local": "sls invoke local -f insert --path requests-mock/funcionarios.insert.json",
+    "invoke": "sls invoke  -f insert --path requests-mock/funcionarios.insert.json",
+    "invoke-trigger": "sls invoke local -f trigger --path requests-mock/funcionarios.trigger.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
