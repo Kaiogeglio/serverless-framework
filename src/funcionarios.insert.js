@@ -19,7 +19,7 @@ class Handler {
     }
 
     async insertItem(params) {
-        return this.dynamoDbSvc.update(params).promise()
+        return this.dynamoDbSvc.put(params).promise()
     }
 
     prepareData(data) {

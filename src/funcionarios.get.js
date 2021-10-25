@@ -1,3 +1,4 @@
+const Joi = require('@hapi/joi')
 const decoratorValidator = require('./util/decoratorValidator')
 const globalEnum = require('./util/globalEnum')
 
@@ -8,15 +9,25 @@ class Handler {
         this.dynamodbTable = process.env.DYNAMODB_TABLE
     }
 
+    static validator() {
+        return Joi.object({
+            id: Joi.string().required(),
+        })
+    }
+
     async getItem(params) {
-        return this.dynamoDbSvc.get(params).promise()
+        return this.dynamoDbSvc.query(params).promise()
     }
 
     prepareData(data) {
         const params = {
             TableName: this.dynamodbTable,
-            Item: {
-                ...data
+            KeyConditionExpression: '#id = :id',
+            ExpressionAttributeNames: {
+                "#id":"id"
+            },
+            ExpressionAttributeValues: {
+                ':id': data.id
             }
         }
         return params
@@ -38,14 +49,17 @@ class Handler {
         }
     }
     async main(event) {
+        return event
         try {
             // agora o decorator modifica o body e já
             // retorna no formato JSON
-            const data = event.body
+            const data = event;
+            
+
  
             const dbParams = this.prepareData(data)
-            await this.getItem(dbParams)
-            return this.handlerSuccess(dbParams.Item)
+            const response = await this.getItem(dbParams)
+            return this.handlerSuccess(response)
         } catch (error) {
             console.error('Deu ruim**', error.stack)
             return this.handleError({ statusCode: 500 })
@@ -61,4 +75,4 @@ const handler = new Handler({
 module.exports = decoratorValidator(
     handler.main.bind(handler),
     Handler.validator(),
-    globalEnum.ARG_TYPE.BODY)
+    globalEnum.ARG_TYPE.QUERYSTRING)
