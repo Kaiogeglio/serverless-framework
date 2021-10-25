@@ -12,7 +12,7 @@
   },
   "scripts": {
     "invoke-local-insert": "sls invoke local -f insert --path requests-mock/funcionarios.insert.json",
-    "invoke-local-get": "serverless invoke local -f get --data '{ 'queryStringParameters': {'id':'f23dc700-3530-11ec-ac6c-e74a90fc0553'}}'",
+    "invoke-local-get": "serverless invoke local -f get --data '{ 'path': {'id':'f23dc700-3530-11ec-ac6c-e74a90fc0553'}}'",
     "invoke-insert": "sls invoke  -f insert --path requests-mock/funcionarios.insert.json",
     "invoke-get": "sls invoke  -f get --path requests-mock/funcionarios.get.json",
     "invoke-trigger": "sls invoke local -f trigger --path requests-mock/funcionarios.trigger.json",

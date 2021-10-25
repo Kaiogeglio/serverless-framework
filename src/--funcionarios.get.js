@@ -1,4 +1,3 @@
-const uuid = require('uuid')
 const Joi = require('@hapi/joi')
 const decoratorValidator = require('./util/decoratorValidator')
 const globalEnum = require('./util/globalEnum')
@@ -12,7 +11,7 @@ class Handler {
 
     static validator() {
         return Joi.object({
-            id: Joi.string(),
+            id: Joi.string().required(),
         })
     }
 
@@ -20,13 +19,16 @@ class Handler {
         return this.dynamoDbSvc.query(params).promise()
     }
 
-    prepareData(id) {
+    prepareData(data) {
         const params = {
             TableName: this.dynamodbTable,
-            KeyConditionExpression: 'id = :id',
-            ExpressionAttributeValues: {
-                ':id': 'f23dc700-3530-11ec-ac6c-e74a90fc0553'
+            KeyConditionExpression: '#id = :id',
+            ExpressionAttributeNames: {
+                "#id":"id"
             },
+            ExpressionAttributeValues: {
+                ':id': data.id
+            }
         }
         return params
     }
@@ -47,20 +49,21 @@ class Handler {
         }
     }
     async main(event) {
-        
-        return this.handlerSuccess(event)
-        // try {
-        //     // retorna no formato JSON
-        //     const { id } = event.pathParameters;
- 
-        //     const dbParams = this.prepareData(id)
+        console.log(event)
+        try {
+            // agora o decorator modifica o body e já
+            // retorna no formato JSON
+            const data = event;
             
-        //     const response = await this.getItem(dbParams)
-        //     return this.handlerSuccess(response)
-        // } catch (error) {
-        //     console.error('Deu ruim**', error.stack)
-        //     return this.handleError({ statusCode: 500 })
-        // }
+
+ 
+            const dbParams = this.prepareData(data)
+            const response = await this.getItem(dbParams)
+            return this.handlerSuccess(response)
+        } catch (error) {
+            console.error('Deu ruim**', error.stack)
+            return this.handleError({ statusCode: 500 })
+        }
     }
 }
 //factory
@@ -72,4 +75,4 @@ const handler = new Handler({
 module.exports = decoratorValidator(
     handler.main.bind(handler),
     Handler.validator(),
-    globalEnum.ARG_TYPE.PATH)
+    globalEnum.ARG_TYPE.QUERYSTRING)

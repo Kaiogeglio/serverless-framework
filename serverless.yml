@@ -44,9 +44,9 @@ functions:
     handler: handler.funcionariosGet
     events:
       - http:
-          path: funcionarios/{id}
+          path: funcionario/{id}
           method: get
-          cors: true
+          cors: true       
 
   insert:
     handler: handler.funcionariosInsert
@@ -56,13 +56,13 @@ functions:
           method: post
           cors: true
 
-  # update:
-  #   handler: handler.funcionariosUpdate
-  #   events:
-  #     - http:
-  #         path: funcionarios
-  #         method: put
-  #         cors: true
+  update:
+    handler: handler.funcionariosUpdate
+    events:
+      - http:
+          path: funcionario/{id}
+          method: put
+          cors: true
 
 
   trigger:
