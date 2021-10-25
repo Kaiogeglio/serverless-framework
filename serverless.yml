@@ -60,7 +60,7 @@ functions:
     handler: handler.funcionariosUpdate
     events:
       - http:
-          path: funcionario/{id}
+          path: funcionario
           method: put
           cors: true
 

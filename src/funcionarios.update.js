@@ -12,6 +12,7 @@ class Handler {
 
     static validator() {
         return Joi.object({
+            id: Joi.string().required(),
             nome: Joi.string().max(100).min(2),
             idade: Joi.string().max(2),
             cargo: Joi.string().max(100)

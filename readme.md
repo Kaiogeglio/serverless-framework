@@ -6,3 +6,6 @@
   get: trigger-dynamo-dev-get
   insert: trigger-dynamo-dev-insert
   trigger: trigger-dynamo-dev-trigger
+
+## Observações
+  Faltou finalizar os testes e ver se tudo está funcionando corretamente
